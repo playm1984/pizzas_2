@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pizza JS</title>
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <div class="logo_title">
+          <img src="./image/icon/logo.png" alt="" />
+          <div class="text_title">
+            <h1>PIZZA</h1>
+            <p>самая вкусная пицца во вселенной</p>
+          </div>
+        </div>
+
+        <button class="cartBtn">
+          <p>520</p>
+          <span></span>
+          <div class="cartCount">
+            <img src="./image/icon/cart.png" alt="cart" />
+            <p>3</p>
+          </div>
+        </button>
+      </header>
+
+      <main>
+        <section class="filterPanel">
+          <div class="filter">
+            <button class="filterBtn active">Все</button>
+            <button class="filterBtn">Мясные</button>
+            <button class="filterBtn">Вегетарианская</button>
+            <button class="filterBtn">Гриль</button>
+            <button class="filterBtn">Острые</button>
+            <button class="filterBtn">Закрытые</button>
+          </div>
+
+          <div class="sort">
+            <p>Сортировка:</p>
+            <select>
+              <option value="">по цене</option>
+              <option value="">по названию</option>
+            </select>
+          </div>
+        </section>
+
+        <h1 class="title">Все пиццы</h1>
+
+        <section class="pizzasCard"></section>
+      </main>
+    </div>
+
+    <script src="./data.js"></script>
+    <script src="./main.js"></script>
+  </body>
+</html>
