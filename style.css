@@ -105,6 +105,10 @@ header {
   align-items: center;
 }
 
+.sort > p {
+  margin-right: 10px;
+}
+
 /* PIZZA CARD */
 
 .title {

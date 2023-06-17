@@ -1,7 +1,9 @@
 let pizzas = [
   {
+    id: "01",
     image: "./image/pizzas_img/01.jpg",
     name: "Чизбургер-пицца",
+    filter: "Мясные",
     type: [
       {
         isVisble: true,
@@ -18,8 +20,10 @@ let pizzas = [
     ],
   },
   {
+    id: "02",
     image: "./image/pizzas_img/02.jpg",
     name: "Сырная",
+    filter: "Вегетарианская",
     type: [
       {
         isVisble: true,
@@ -36,14 +40,16 @@ let pizzas = [
     ],
   },
   {
+    id: "03",
     image: "./image/pizzas_img/03.jpg",
     name: "Креветки по-азиатски",
+    filter: "Острые",
     type: [
       {
         isVisble: true,
         isActive: true,
         name: "тонкое",
-        price: 465,
+        price: 435,
       },
       {
         isVisble: false,
@@ -54,8 +60,10 @@ let pizzas = [
     ],
   },
   {
+    id: "04",
     image: "./image/pizzas_img/04.jpg",
     name: "Сырный цыпленок",
+    filter: "Мясные",
     type: [
       {
         isVisble: true,
