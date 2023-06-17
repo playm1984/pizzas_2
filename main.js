@@ -37,7 +37,13 @@ function displayPizzas(pizzasItem) {
         </div>
         <div class="price_buy">
           <p>от <span>${pizzasItem[i].type[typeActiveID].price}</span> KZT</p>
-          <button>+ Добавить</button>
+          <button class='addPizzasBtn' onclick='addPizzasCart("${
+            pizzasItem[i].name
+          }", "${
+        pizzasItem[i].type.filter((el) => el.isActive === true)[0].name
+      }", "${
+        pizzasItem[i].type.filter((el) => el.isActive === true)[0].price
+      }")'>+ Добавить</button>
         </div>
       </div>`
     );
@@ -120,9 +126,3 @@ function chageTypePizza(type, id) {
 
   DOMElements.pizzasCard.innerHTML = pizzasItem.join("");
 }
-
-const funcA = (numA) => (numB) => numA === numB ? true : false;
-
-let a = funcA(5);
-
-console.log(a(3));
