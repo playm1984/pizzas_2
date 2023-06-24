@@ -2,6 +2,9 @@ const DOMElements = {
   pizzasCard: document.querySelector(".pizzasCard"),
   filterBtns: document.querySelectorAll(".filterBtn"),
   sortSelect: document.querySelector(".sortSelect"),
+  cartBtn: document.querySelector(".cartBtn"),
+  main: document.querySelector(".main"),
+  carts: document.querySelector(".carts"),
 };
 
 let tempFiltredPizzas = pizzas;
@@ -43,6 +46,8 @@ function displayPizzas(pizzasItem) {
         pizzasItem[i].type.filter((el) => el.isActive === true)[0].name
       }", "${
         pizzasItem[i].type.filter((el) => el.isActive === true)[0].price
+      }", "${
+        pizzasItem[i].type.filter((el) => el.isActive === true)[0].id
       }")'>+ Добавить</button>
         </div>
       </div>`
@@ -126,3 +131,9 @@ function chageTypePizza(type, id) {
 
   DOMElements.pizzasCard.innerHTML = pizzasItem.join("");
 }
+
+DOMElements.cartBtn.addEventListener("click", function () {
+  DOMElements.main.classList.add("none");
+  DOMElements.cartBtn.classList.add("none");
+  DOMElements.carts.classList.remove("none");
+});
