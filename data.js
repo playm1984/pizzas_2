@@ -1,6 +1,6 @@
 let pizzas = [
   {
-    id: "01",
+    id: "1",
     image: "./image/pizzas_img/01.jpg",
     name: "Чизбургер-пицца",
     filter: "Мясные",
@@ -22,7 +22,7 @@ let pizzas = [
     ],
   },
   {
-    id: "02",
+    id: "2",
     image: "./image/pizzas_img/02.jpg",
     name: "Сырная",
     filter: "Вегетарианская",
@@ -44,7 +44,7 @@ let pizzas = [
     ],
   },
   {
-    id: "03",
+    id: "3",
     image: "./image/pizzas_img/03.jpg",
     name: "Креветки по-азиатски",
     filter: "Острые",
@@ -66,7 +66,7 @@ let pizzas = [
     ],
   },
   {
-    id: "04",
+    id: "4",
     image: "./image/pizzas_img/04.jpg",
     name: "Сырный цыпленок",
     filter: "Мясные",

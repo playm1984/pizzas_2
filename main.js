@@ -5,9 +5,18 @@ const DOMElements = {
   cartBtn: document.querySelector(".cartBtn"),
   main: document.querySelector(".main"),
   carts: document.querySelector(".carts"),
+  totalPrizzaMain: document.querySelector(".totalPrizzaMain"),
+  totalCountMain: document.querySelector(".totalCountMain"),
 };
 
 let tempFiltredPizzas = pizzas;
+
+window.addEventListener("DOMContentLoaded", function () {
+  let infoPizzas = getPizzasInfoCookie();
+
+  DOMElements.totalPrizzaMain.innerHTML = infoPizzas.totalPrice;
+  DOMElements.totalCountMain.innerHTML = infoPizzas.totalCount;
+});
 
 function displayPizzas(pizzasItem) {
   let items = [];

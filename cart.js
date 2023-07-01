@@ -1,50 +1,17 @@
 const DOMElementsCart = {
   addPizzasBtn: document.querySelectorAll(".addPizzasBtn"),
-  totalPrizzaMain: document.querySelector(".totalPrizzaMain"),
-  totalCountMain: document.querySelector(".totalCountMain"),
   returnMain: document.querySelector(".returnMain"),
   cart_items: document.querySelector(".cart_items"),
+  cartCountPizzas: document.querySelector(".countPizzas"),
+  cartTotalPrice: document.querySelector(".totalPrice"),
 };
 
-let countPizza = 0;
-
-function getPizzasInfoCookie() {
-  let cookies = document.cookie.split("; ");
-
-  let totalPrice = 0;
-  let totalCount = 0;
-  let arrayPizzas = [];
-  for (let i = 0; i < cookies.length; i++) {
-    if (cookies[i].split("=")[0] === "pizza") {
-      let cookiePizzasArray = cookies[i].split("=")[1].split(",");
-      arrayPizzas = cookiePizzasArray;
-      totalCount = cookiePizzasArray.length;
-      for (let i = 0; i < cookiePizzasArray.length; i++) {
-        const pizza = cookiePizzasArray[i].split("/");
-        totalPrice += +pizza[2];
-      }
-    }
-  }
-  return {
-    totalPrice,
-    totalCount,
-    arrayPizzas,
-  };
-}
-
-window.addEventListener("DOMContentLoaded", function () {
-  let infoPizzas = getPizzasInfoCookie();
-
-  DOMElementsCart.totalPrizzaMain.innerHTML = infoPizzas.totalPrice;
-  DOMElementsCart.totalCountMain.innerHTML = infoPizzas.totalCount;
-});
-
 function addPizzasCart(name, type, price, id) {
-  DOMElementsCart.totalPrizzaMain.innerHTML =
-    +DOMElementsCart.totalPrizzaMain.innerHTML + +price;
+  DOMElements.totalPrizzaMain.innerHTML =
+    +DOMElements.totalPrizzaMain.innerHTML + +price;
 
-  countPizza += 1;
-  DOMElementsCart.totalCountMain.innerHTML = countPizza;
+  DOMElements.totalCountMain.innerHTML =
+    +DOMElements.totalCountMain.innerHTML + 1;
 
   let cookiePizza = `${name}/${type}/${price}/${id}`;
   let isCheck = false;
@@ -64,52 +31,62 @@ function addPizzasCart(name, type, price, id) {
 function displayPizzasCart() {
   let infoPizzas = getPizzasInfoCookie();
 
-  // let objPizzas = {};
+  DOMElementsCart.cartCountPizzas.innerHTML = infoPizzas.totalCount;
+  DOMElementsCart.cartTotalPrice.innerHTML = infoPizzas.totalPrice;
 
-  // for (let i = 0; i < infoPizzas.arrayPizzas.length; i++) {
-  //   const elem = infoPizzas.arrayPizzas[i];
-
-  //   let key = elem.split("/")[3];
-
-  //   if (objPizzas[key] !== undefined) {
-  //     objPizzas[key] += 1;
-  //   } else {
-  //     objPizzas[key] = 1;
-  //   }
-  // }
+  let sortedPizzas = [];
 
   let items = [];
 
-  for (let i = 0; i < infoPizzas.arrayPizzas.length; i++) {
-    const elem = infoPizzas.arrayPizzas[i];
+  for (const key in infoPizzas.objPizzas) {
+    let id = key.split("_")[0];
+    let count = infoPizzas.objPizzas[key];
 
-    let name = elem.split("/")[0];
-    let typePizza = elem.split("/")[1];
-    let price = elem.split("/")[2];
+    for (let i = 0; i < pizzas.length; i++) {
+      let pizza = pizzas[i];
+      if (pizza.id === id) {
+        for (let k = 0; k < pizza.type.length; k++) {
+          const typePizza = pizza.type[k];
+          if (typePizza.id === key) {
+            let result = {
+              ...typePizza,
+              image: pizza.image,
+              count,
+              pizza: pizza.name,
+            };
+            sortedPizzas.push(result);
+          }
+        }
+      }
+    }
+  }
+
+  for (let i = 0; i < sortedPizzas.length; i++) {
+    const elem = sortedPizzas[i];
 
     items.push(`<div class="cart_item">
     <div class="cart_wrapper">
         <div class="item_info">
-            <img src="" alt="" />
+            <img src="${elem.image}" alt="" />
             <div class="item_info_description">
-                <h1>${name}</h1>
-                <p>${typePizza} тесто</p>
+                <h1>${elem.pizza}</h1>
+                <p>${elem.name} тесто</p>
             </div>
         </div>
         <div class="item_count">
-            <button onclick='calcPizzaInCart("-")'>
+            <button onclick='calcPizzaInCart("${elem.id}", "-")'>
                 <p>-</p>
             </button>
-            <p>1</p>
-            <button onclick='calcPizzaInCart("+")'>
+            <p>${elem.count}</p>
+            <button onclick='calcPizzaInCart("${elem.id}", "+")'>
                 <p>+</p>
             </button>
         </div>
     </div>
     <div class="cart_wrapper">
-        <h1 class="item_price">${price} P</h1>
+        <h1 class="item_price">${elem.price * elem.count} P</h1>
         <button class="remove" onclick='removeTypsPizzas()'>
-            <img src="../../img/remove.png" alt="remove" />
+            <img src="./image/icon/remove.png" alt="remove" />
         </button>
     </div>
   </div>
@@ -121,6 +98,23 @@ function displayPizzasCart() {
 const pizzasItemCart = displayPizzasCart();
 
 DOMElementsCart.cart_items.innerHTML = pizzasItemCart.join("");
+
+function calcPizzaInCart(id, operator) {
+  let pizzasCookie = getPizzasInfoCookie();
+
+  for (const key in pizzasCookie.objPizzas) {
+    if (key === id) {
+      if (operator === "+") {
+        pizzasCookie.objPizzas[key] += 1;
+        addPizzasCookie(id);
+        displayPizzasCart();
+      }
+      if (operator === "-") {
+        pizzasCookie.objPizzas[key] -= 1;
+      }
+    }
+  }
+}
 
 DOMElementsCart.returnMain.addEventListener("click", function () {
   DOMElements.main.classList.remove("none");
