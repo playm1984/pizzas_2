@@ -50,13 +50,9 @@ function displayPizzas(pizzasItem) {
         <div class="price_buy">
           <p>от <span>${pizzasItem[i].type[typeActiveID].price}</span> KZT</p>
           <button class='addPizzasBtn' onclick='addPizzasCart("${
-            pizzasItem[i].name
+            pizzasItem[i].type.filter((el) => el.isActive === true)[0].id
           }", "${
-        pizzasItem[i].type.filter((el) => el.isActive === true)[0].name
-      }", "${
         pizzasItem[i].type.filter((el) => el.isActive === true)[0].price
-      }", "${
-        pizzasItem[i].type.filter((el) => el.isActive === true)[0].id
       }")'>+ Добавить</button>
         </div>
       </div>`
@@ -142,7 +138,64 @@ function chageTypePizza(type, id) {
 }
 
 DOMElements.cartBtn.addEventListener("click", function () {
-  DOMElements.main.classList.add("none");
-  DOMElements.cartBtn.classList.add("none");
-  DOMElements.carts.classList.remove("none");
+  let cookies = document.cookie.split("; ");
+  let cookie = false;
+
+  for (let i = 0; i < cookies.length; i++) {
+    if (cookies[i].split("=")[0] === "pizza") {
+      cookie = true;
+    }
+  }
+
+  if (cookie) {
+    DOMElements.main.classList.add("none");
+    DOMElements.cartBtn.classList.add("none");
+    DOMElements.carts.classList.remove("none");
+
+    displayPizzasCart();
+  }
 });
+
+function addPizzasCart(id, price) {
+  DOMElements.totalPrizzaMain.innerHTML =
+    +DOMElements.totalPrizzaMain.innerHTML + +price;
+
+  DOMElements.totalCountMain.innerHTML =
+    +DOMElements.totalCountMain.innerHTML + 1;
+
+  // let cookiePizza = id;
+  // let isCheck = false;
+
+  // let cookies = document.cookie.split("; ");
+
+  // for (let i = 0; i < cookies.length; i++) {
+  //   if (cookies[i].split("=")[0] === "pizza") {
+  //     isCheck = true;
+  //     document.cookie = `${[cookies[i], cookiePizza].join(",")}; max-age=1000`;
+  //   } else {
+  //     document.cookie = `pizza=${cookiePizza}; max-age=1000`;
+  //   }
+  // }
+
+  let cookies = document.cookie.split("; ");
+  let cookie = false;
+
+  for (let i = 0; i < cookies.length; i++) {
+    if (cookies[i].split("=")[0] === "pizza") {
+      cookie = cookies[i].split("=")[1].split(",");
+      let totalPrice = +cookie[0] + +price;
+      let ids = cookie.splice(1, cookie.length).concat(id);
+      let resCookie = `pizza=${[totalPrice, ids]}; max-age=100000`;
+
+      document.cookie = resCookie;
+
+      // allPrice.innerHTML = totalPrice;
+      // quantityPizza.innerHTML = idPizzas.length;
+    } else {
+      let resCookie = `pizza=${price},${id}; max-age=100000`;
+      document.cookie = resCookie;
+      // allPrice.innerHTML = price;
+      // quantityPizza.innerHTML = 1;
+    }
+  }
+}

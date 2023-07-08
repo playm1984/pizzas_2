@@ -4,32 +4,13 @@ const DOMElementsCart = {
   cart_items: document.querySelector(".cart_items"),
   cartCountPizzas: document.querySelector(".countPizzas"),
   cartTotalPrice: document.querySelector(".totalPrice"),
+  trashText: document.querySelector(".trash_text"),
+  emptyPage: document.querySelector(".emptyPage"),
+  returnMainInEmpty: document.querySelector(".returnMainInEmpty"),
 };
 
-function addPizzasCart(name, type, price, id) {
-  DOMElements.totalPrizzaMain.innerHTML =
-    +DOMElements.totalPrizzaMain.innerHTML + +price;
-
-  DOMElements.totalCountMain.innerHTML =
-    +DOMElements.totalCountMain.innerHTML + 1;
-
-  let cookiePizza = `${name}/${type}/${price}/${id}`;
-  let isCheck = false;
-
-  let cookies = document.cookie.split("; ");
-
-  for (let i = 0; i < cookies.length; i++) {
-    if (cookies[i].split("=")[0] === "pizza") {
-      isCheck = true;
-      document.cookie = `${[cookies[i], cookiePizza].join(",")}; max-age=1000`;
-    } else {
-      document.cookie = `pizza=${cookiePizza}; max-age=1000`;
-    }
-  }
-}
-
 function displayPizzasCart() {
-  let infoPizzas = getPizzasInfoCookie();
+  const infoPizzas = getPizzasInfoCookie();
 
   DOMElementsCart.cartCountPizzas.innerHTML = infoPizzas.totalCount;
   DOMElementsCart.cartTotalPrice.innerHTML = infoPizzas.totalPrice;
@@ -44,16 +25,20 @@ function displayPizzasCart() {
 
     for (let i = 0; i < pizzas.length; i++) {
       let pizza = pizzas[i];
+
       if (pizza.id === id) {
         for (let k = 0; k < pizza.type.length; k++) {
           const typePizza = pizza.type[k];
           if (typePizza.id === key) {
             let result = {
-              ...typePizza,
-              image: pizza.image,
-              count,
               pizza: pizza.name,
+              id: typePizza.id,
+              name: typePizza.name,
+              price: typePizza.price,
+              count,
+              image: pizza.image,
             };
+
             sortedPizzas.push(result);
           }
         }
@@ -85,35 +70,41 @@ function displayPizzasCart() {
     </div>
     <div class="cart_wrapper">
         <h1 class="item_price">${elem.price * elem.count} P</h1>
-        <button class="remove" onclick='removeTypsPizzas()'>
+        <button class="remove" onclick='removeTypePizzas("${elem.id}")'>
             <img src="./image/icon/remove.png" alt="remove" />
         </button>
     </div>
   </div>
     `);
   }
-  return items;
+
+  DOMElementsCart.cart_items.innerHTML = items.join("");
 }
-
-const pizzasItemCart = displayPizzasCart();
-
-DOMElementsCart.cart_items.innerHTML = pizzasItemCart.join("");
 
 function calcPizzaInCart(id, operator) {
   let pizzasCookie = getPizzasInfoCookie();
+
+  let editCookie = "";
 
   for (const key in pizzasCookie.objPizzas) {
     if (key === id) {
       if (operator === "+") {
         pizzasCookie.objPizzas[key] += 1;
-        addPizzasCookie(id);
-        displayPizzasCart();
       }
       if (operator === "-") {
         pizzasCookie.objPizzas[key] -= 1;
       }
     }
   }
+
+  for (const key in pizzasCookie.objPizzas) {
+    for (let i = 0; i < pizzasCookie.objPizzas[key]; i++) {
+      editCookie += `${key},`;
+    }
+  }
+  document.cookie = `pizza=1000,${editCookie}; max=age=1000000`;
+
+  displayPizzasCart();
 }
 
 DOMElementsCart.returnMain.addEventListener("click", function () {
@@ -121,3 +112,37 @@ DOMElementsCart.returnMain.addEventListener("click", function () {
   DOMElements.cartBtn.classList.remove("none");
   DOMElements.carts.classList.add("none");
 });
+
+displayPizzasCart();
+
+DOMElementsCart.trashText.addEventListener("click", function () {
+  document.cookie = "pizza=;max-age=-1";
+
+  DOMElements.carts.classList.add("none");
+  DOMElementsCart.emptyPage.classList.remove("none");
+});
+
+DOMElementsCart.returnMainInEmpty.addEventListener("click", function () {
+  DOMElementsCart.emptyPage.classList.add("none");
+  DOMElements.main.classList.remove("none");
+  DOMElements.cartBtn.classList.remove("none");
+  location.reload();
+});
+
+function removeTypePizzas(idPizza) {
+  let pizzasCookie = getPizzasInfoCookie();
+
+  let editCookie = "";
+
+  delete pizzasCookie.objPizzas[idPizza];
+
+  for (const key in pizzasCookie.objPizzas) {
+    for (let i = 0; i < pizzasCookie.objPizzas[key]; i++) {
+      editCookie += `${key},`;
+    }
+  }
+
+  document.cookie = `pizza=1000,${editCookie}; max=age=1000000`;
+
+  displayPizzasCart();
+}
